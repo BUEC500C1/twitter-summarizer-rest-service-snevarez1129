@@ -1,12 +1,12 @@
 # video-snevarez1129
 
 ## Assignment:
-Use Flask as your WEB service platform
-Integrate your module to become a RESTFUL system
-Deploy your system to free AWS services: https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc
-Develop simple WEB applications to test your system.
-Document your REST APIs on your Github
-Keep your server off until we request it for grading. We dont want you to waste money.
+1. Use Flask as your WEB service platform
+2. Integrate your module to become a RESTFUL system
+3. Deploy your system to free AWS services: https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc
+4. Develop simple WEB applications to test your system.
+5. Document your REST APIs on your Github
+6. Keep your server off until we request it for grading. We dont want you to waste money.
 
 ## Introduction:
 This assignment is a continuation of HW4 in which we were tasked with creating a system to convert a twitter feed into a video summary. In my HW4 assignment I included flask making my system a RESTFUL one already. For HW5... STILL NEED TO deploy on AWS, develop a simple web application, go back over threading (add more threads?).
