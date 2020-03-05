@@ -1,8 +1,6 @@
 import pytest
-import stubFunctions
+import stubFunctions as s
 
 def test_stubFunctions():
-    assert stubFunctions.getTweets("realDonaldTrump") == ["realDonaldTrump", "Big Rally in the Great State of South Carolina on Friday. See you there!", "Feb 26, 2020", "89.9K"]
-    assert stubFunctions.getTweets("cnni") == ["cnni", "A flat bed in economy? This airline wants to make it happen: https://cnn.it/2VsAqIg", "Feb 27, 2020", 134]
-    assert stubFunctions.getTweets("CNN") == ["CNN", "Researchers have discovered a new type of lion, the size of a domestic cat, with powerful flesh-cutting teeth, which roamed the earth around 24 million years ago.", "Feb 28, 2020", 739]
-    assert stubFunctions.getTweets("busnowtm") == ["busnowtm", "Are you all ready for a great season? Make sure you check out our table at Splash this Saturday to get information about the upcoming season! See you then!", "Sep 5, 2018", 2]
+    assert s.getTweets() == {"BarackObama": {"name": "BarackObama", "tweet": "What a great example of citizenship, what each of us can do to make a difference for all of us: https://t.co/YxsvONUuVl", "date": "2020 Feb 13"}, "Cristiano": {"name": "Cristiano", "tweet": "\ud83d\udc40 https://t.co/MRxEXFuthE", "date": "2020 Jan 11"}, "TheEllenShow": {"name": "TheEllenShow", "tweet": "Shanell and her daughter Kinley deserve the #BestNewsEver. Good thing @Usher was here to help me deliver it. https://t.co/pVNiVsyJC4", "date": "2020 Mar 4"}, "realDonaldTrump": {"name": "realDonaldTrump", "tweet": "The Mayor of Los Angeles, @ericgarcetti, is dealing with us trying to get the Federal Government to fix the terribl\u2026 https://t.co/t3asbDDxcb", "date": "2020 Mar 4"}, "busnowtm": {"name": "busnowtm", "tweet": "the squad cheering on the basketball team at #rocktheroof thanks @BU_ClubSports for such an awesome night! \ud83c\udfc0\ud83c\udf89\ud83c\udfc0\ud83e\udd1f https://t.co/9YvRjz80Q0", "date": "2018 Feb 1"}}
+    assert s.pickHandle() == "BarackObama" or "Cristiano" or "TheEllenShow" or "realDonaldTrump" or "busnowtm"
