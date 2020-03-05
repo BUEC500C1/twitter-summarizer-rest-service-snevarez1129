@@ -1,4 +1,4 @@
-# video-snevarez1129
+# twitter-summarizer-rest-service-snevarez1129
 
 ## Assignment:
 1. Use Flask as your WEB service platform

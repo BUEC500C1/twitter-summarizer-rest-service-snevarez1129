@@ -12,16 +12,16 @@ class twitter_api():
 
     def get_profilePic(self, handle):
         try:
-            profile = self.api.get_user(handle) #get the users profile picture using the twitter handle
+            profile = self.api.get_user(handle) #get the profile picture using the twitter handle
             return profile.profile_image_url_https
-        except tweepy.error.TweepError as e: #if there was an error
+        except tweepy.error.TweepError as e:
             print(e)
             return ""
 
     def get_tweets(self, handle):
         try:
-            tweets = self.api.user_timeline(screen_name=handle, count=20) #get the users last 20 tweets using the twitter handle
+            tweets = self.api.user_timeline(screen_name=handle, count=20) #get the last 20 tweets using the twitter handle
             return tweets
-        except tweepy.error.TweepError as e: #if there was an error
+        except tweepy.error.TweepError as e:
             print(e)
             return ""

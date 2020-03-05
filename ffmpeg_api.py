@@ -11,7 +11,7 @@ import textwrap
 class ffmpeg_api():
 
     def __init__(self):
-        pass #do nothing, just create object
+        pass #do nothing, just create an instance of the class
 
     def createImage(self, twitter_handle, profilePic, tweet, count):
 
