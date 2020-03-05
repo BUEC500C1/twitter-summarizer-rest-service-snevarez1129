@@ -1,6 +1,7 @@
 import pytest
+import savedTweets
 import stubFunctions as s
 
 def test_stubFunctions():
-    assert s.getTweets() == {"BarackObama": {"name": "BarackObama", "tweet": "What a great example of citizenship, what each of us can do to make a difference for all of us: https://t.co/YxsvONUuVl", "date": "2020 Feb 13"}, "Cristiano": {"name": "Cristiano", "tweet": "\ud83d\udc40 https://t.co/MRxEXFuthE", "date": "2020 Jan 11"}, "TheEllenShow": {"name": "TheEllenShow", "tweet": "Shanell and her daughter Kinley deserve the #BestNewsEver. Good thing @Usher was here to help me deliver it. https://t.co/pVNiVsyJC4", "date": "2020 Mar 4"}, "realDonaldTrump": {"name": "realDonaldTrump", "tweet": "The Mayor of Los Angeles, @ericgarcetti, is dealing with us trying to get the Federal Government to fix the terribl\u2026 https://t.co/t3asbDDxcb", "date": "2020 Mar 4"}, "busnowtm": {"name": "busnowtm", "tweet": "the squad cheering on the basketball team at #rocktheroof thanks @BU_ClubSports for such an awesome night! \ud83c\udfc0\ud83c\udf89\ud83c\udfc0\ud83e\udd1f https://t.co/9YvRjz80Q0", "date": "2018 Feb 1"}}
-    assert s.pickHandle() == "BarackObama" or "Cristiano" or "TheEllenShow" or "realDonaldTrump" or "busnowtm"
+    assert s.getTweets() == savedTweets.dictionary
+    #assert s.pickHandle() == "BarackObama" or "Cristiano" or "TheEllenShow" or "realDonaldTrump" or "busnowtm"
