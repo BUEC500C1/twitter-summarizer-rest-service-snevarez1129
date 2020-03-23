@@ -33,5 +33,5 @@ dictionary = {
     }
 }
 
-with open("savedTweets.json", "w") as f:
+with open("offline.json", "w") as f:
     json.dump(dictionary, f)
