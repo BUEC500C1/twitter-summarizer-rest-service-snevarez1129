@@ -4,7 +4,8 @@ import random
 def getTweets():
     #open json file
     with open("savedTweets.json", "r") as f:
-        json_obj = json.load(f) #read from json file
+        data = f.read()
+        json_obj = json.loads(data) #read from json file
     return json_obj #return object
 
 def pickHandle():
@@ -22,3 +23,4 @@ def generateResponse(json_obj, twitter_handle):
     data = json_obj[twitter_handle]
     resp = [header, data]
     return resp
+    

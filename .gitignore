@@ -1,3 +1,6 @@
 env
 keys
 videoFiles
+myKeys1.pem
+myKeys2.pem
+__pycache__

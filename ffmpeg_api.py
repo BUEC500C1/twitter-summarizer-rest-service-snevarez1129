@@ -3,7 +3,6 @@ from PIL import Image, ImageDraw, ImageFont
 
 import datetime
 import os
-import queue
 import requests
 import subprocess
 import textwrap
@@ -40,7 +39,8 @@ class ffmpeg_api():
 
     def createVideo(self, twitter_handle):            
         cmd = ['ffmpeg', '-y', '-r', '1/3', '-i', './videoFiles/'+twitter_handle+'%d.png', '-pix_fmt', 'yuv420p', '-r',
-            '25', '-loglevel', 'error', '-hide_banner', twitter_handle + '_twitter_feed.mp4']
+        '25', '-loglevel', 'error', '-hide_banner', twitter_handle + '_twitter_feed.mp4']
+        
         try:
             #launch a subprocess to create the video using the images created
             subprocess.run(cmd, stdout=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
@@ -48,4 +48,5 @@ class ffmpeg_api():
         except Exception as e:
             print("Uh oh, looks like there was an error creating the video")
             print(e)
+        
         return
