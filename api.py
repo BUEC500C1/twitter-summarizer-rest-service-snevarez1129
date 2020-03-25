@@ -1,9 +1,9 @@
 from flask import Flask
 from flask_restful import reqparse, abort, Api, Resource
 
-import ffmpeg_api as ff
+import ffmpeg as ff
 import stubFunctions as s
-import twitter_api as twi
+import twitter as twi
 
 import glob
 import os
@@ -82,13 +82,7 @@ class Video(Resource):
         resp = {"file location": os.getcwd() + '/' + twitter_handle + '_' + r'twitter_feed.mp4'} #create json response for api call
         return resp
 
-class Hello(Resource):
-    def get(self):
-        resp = {"Welcome!": "Append a twitter handle to the URL to use this API!"}
-        return resp
-
 #Resources
-api.add_resource(Hello, '/')
 api.add_resource(Video, '/<twitter_handle>')
 
 if __name__ == '__main__':
