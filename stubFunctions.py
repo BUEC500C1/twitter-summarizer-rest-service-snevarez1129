@@ -3,7 +3,7 @@ import random
 
 def getTweets():
     #open json file
-    with open("offline.json", "r") as f:
+    with open("offlineTweets.json", "r") as f:
         data = f.read()
         json_obj = json.loads(data) #read from json file
     return json_obj #return object

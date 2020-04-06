@@ -1,9 +1,10 @@
-from flask import Flask
+from flask import Flask, send_file
 from flask_restful import reqparse, abort, Api, Resource
+from PIL import Image
 
-import ffmpeg as ff
+import twitter as tw
 import stubFunctions as s
-import twitter as twi
+import ffmpeg as ff
 
 import glob
 import os
@@ -11,7 +12,6 @@ import os.path
 import queue
 import requests
 import threading
-import time
 
 app = Flask(__name__)
 api = Api(app)
@@ -24,66 +24,70 @@ def noKeys():
 
 def videoProcessor(handlesQ, f):
     while(True):
-        twitter_handle = handlesQ.get() #get a twitter handle from the queue
-        if twitter_handle is not None: #if there is a twitter handle in the queue
-            frameCount = len(glob.glob1(r"videoFiles/", twitter_handle + r"*.png")) #how many frames in the folder
-            if frameCount < 20: #if there are less than 20 frames, add the handle back to the queue
-                handlesQ.put(twitter_handle)
+        handle = handlesQ.get() #get a twitter handle from the queue
+        if handle is not None: #if there is a twitter handle in the queue
+            imgCount = len(glob.glob1(r"videoFiles/", handle + r"*.png")) #number of images in the folder
+            if imgCount < 20: #if there are less than 20 images, add the handle back to the queue
+                handlesQ.put(handle)
             else: #if there are enough image frames
-                f.createVideo(twitter_handle) #create a video
+                f.createVideo(handle) #create a video
         handlesQ.task_done() #indicate that the video for this twitter handle has been created
-        time.sleep(0.5) #sleep for half a second
 
 def tweetsToPics(tweetsQ, f):
     while(True):
-        tweet = tweetsQ.get() #get the next tweet to convert to an image
-        if tweet is not None:
-            #if there is a tweet, convert it to an image frame
-            f.createImage(tweet[0], tweet[1], tweet[2], tweet[3]) #0 = handle, 1 = profile pic, 2 = tweet, 3 = count
+        tweet = tweetsQ.get() #get the next tweet
+        if tweet is not None: #if there is a tweet
+            f.createImage(tweet[0], tweet[1], tweet[2], tweet[3]) #convert it to an image
         tweetsQ.task_done() #unblock join call from addTweets() once all tweets have been turned to image frames
-        time.sleep(0.5) #sleep for half a second
 
-def addTweets(tweetsQ, twitter_handle, profilePic, profileTweets):
-    for count, tweet in enumerate(profileTweets):
-        tweetsQ.put([twitter_handle, profilePic, tweet, count]) #add each tweet to the queue
+def getTweets(tweetsQ, myHandle, myPic, myTweets):
+    for count, tweet in enumerate(myTweets):
+        tweetsQ.put([myHandle, myPic, tweet, count]) #add tweet to the queue
     tweetsQ.join() #block until all tweets have been turned into images
 
 class Video(Resource):
-    def get(self, twitter_handle):
-        #try to get twitter keys from keys file, if this doesn't work run the stub function for no keys
-        try:
-            t = twi.twitter_api("keys")
-        except:
+    def get(self, myHandle):
+
+        try: #try to get twitter keys from keys file
+            t = tw.twitter("keys")
+        except: #no keys exist, run the stub functions
             resp = noKeys()
             return resp
 
-        #if we are here that means valid keys existed
-        f = ff.ffmpeg_api() #create an ffmpeg object
+        f = ff.ffmpeg() #create an ffmpeg object
+        numTweets = 20 #number of tweets to get
 
-        handlesQ = queue.Queue() #create queue to hold twitter handles in the order the handle called the api
-        tweetsQ = queue.Queue() #create queue to hold tweets in the order they were tweeted by each handle
+        handlesQ = queue.Queue() #queue to hold twitter handles in the order the api received the handle
+        tweetsQ = queue.Queue() #queue to hold tweets in the order they were tweeted by the handle
+        #imagesQ = queue.Queue() #queue to hold tweet images
 
-        handlesQ.put(twitter_handle) #add twitter handle to queue
-        profilePic = t.get_profilePic(twitter_handle) #get the users profile picture
-        profileTweets = t.get_tweets(twitter_handle) #get the users tweets
+        handlesQ.put(myHandle) #add twitter handle to queue
 
-        #thread to add tweets to tweets queue in chronological order
-        t = threading.Thread(name="producer", target=addTweets, args=(tweetsQ, twitter_handle, profilePic, profileTweets))
-        t.start()
+        myPic = t.get_profilePic(myHandle) #get the handles profile picture
+        myTweets = t.get_tweets(myHandle, numTweets) #get the handles tweets
 
-        #thread to convert tweets to image frames
-        t = threading.Thread(name="imageConverter", target=tweetsToPics, args=(tweetsQ, f))
-        t.start()
+        #thread to get the tweets
+        t1 = threading.Thread(name="producer", target=getTweets, args=(tweetsQ, myHandle, myPic, myTweets))
+        t1.setDaemon(True)
+        t1.start()
 
-        #thread to convert the images to a video
-        t = threading.Thread(name="videoCreator", target=videoProcessor, args=(handlesQ, f))
-        t.start()
-        
-        resp = {"file location": os.getcwd() + '/' + twitter_handle + '_' + r'twitter_feed.mp4'} #create json response for api call
-        return resp
+        #thread to convert tweets to images
+        t2 = threading.Thread(name="imageConverter", target=tweetsToPics, args=(tweetsQ, f))
+        t2.setDaemon(True)
+        t2.start()
+
+        #thread to convert the images to video
+        t3 = threading.Thread(name="videoCreator", target=videoProcessor, args=(handlesQ, f))
+        t3.setDaemon(True)
+        t3.start()
+
+        handlesQ.join() #block until the video is created
+
+        myFile = os.getcwd() + '/' + myHandle + '_' + r'twitter_feed.mp4'
+        return send_file(myFile)
 
 #Resources
-api.add_resource(Video, '/<twitter_handle>')
+api.add_resource(Video, '/<myHandle>')
 
 if __name__ == '__main__':
     app.run(debug=True)

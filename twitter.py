@@ -1,7 +1,7 @@
 import configparser
 import tweepy
 
-class twitter_api():
+class twitter():
 
     def __init__(self, path):
         config = configparser.ConfigParser()
@@ -10,17 +10,17 @@ class twitter_api():
         auth.set_access_token(config.get('auth', 'access_token').strip(), config.get('auth', 'access_token_secret').strip())
         self.api = tweepy.API(auth) #authenticate
 
-    def get_profilePic(self, handle):
+    def get_profilePic(self, myHandle):
         try:
-            profile = self.api.get_user(handle) #get the profile picture using the twitter handle
-            return profile.profile_image_url_https
+            profile = self.api.get_user(myHandle) #get user profile
+            return profile.profile_image_url_https #return profile picture
         except tweepy.error.TweepError as e:
             print(e)
             return ""
 
-    def get_tweets(self, handle):
+    def get_tweets(self, myHandle, numTweets):
         try:
-            tweets = self.api.user_timeline(screen_name=handle, count=20) #get the last 20 tweets using the twitter handle
+            tweets = self.api.user_timeline(screen_name=myHandle, count=numTweets) #get the tweets
             return tweets
         except tweepy.error.TweepError as e:
             print(e)
