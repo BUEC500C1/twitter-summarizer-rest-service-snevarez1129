@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
-    <title>Document</title>
+    <title>Welcome</title>
 </head>
 <body>
     <h1>Welcome!</h1>
-    Append a twitter handle to the URL to use the API!
+    <form action="#" method="POST">
+        <fieldset>
+            <legend>To begin, enter a twitter handle in the text box below</legend>
+            <p>
+                <input type="text" id="handle" name="myHandle" />
+            </p>
+            <p>
+                <input type="submit" value="Get Video" />
+            </p>
+        </fieldset>
+    </form>
 </body>
 </html>
